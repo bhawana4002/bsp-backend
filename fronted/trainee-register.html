@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Trainee Registration</title><link rel="stylesheet" href="style.css"></head>
+<body>
+    <div class="bg-animation"><div class="glow-ring ring1"></div><div class="scanner-line"></div></div>
+    <div class="container">
+        <h2>Trainee Registration</h2>
+        <p style="margin-bottom:20px;">Bhilai Steel Plant - C&IT</p>
+        <form id="registerForm">
+            <div class="input-group"><label>Full Name</label><input type="text" id="fullName" placeholder="Enter Full Name" required></div>
+            <div class="input-group"><label>Roll Number</label><input type="text" id="rollNumber" placeholder="Enter Roll Number" required></div>
+            <div class="input-group"><label>Phone Number</label><input type="tel" id="phoneNumber" placeholder="Enter 10-digit Phone Number" maxlength="10" required></div>
+            <div class="input-group">
+                <label>Semester</label>
+                <select id="semester" required>
+                    <option value="" disabled selected>Select Semester</option>
+                    <option value="Semester 1">Semester 1</option><option value="Semester 2">Semester 2</option>
+                    <option value="Semester 3">Semester 3</option><option value="Semester 4">Semester 4</option>
+                    <option value="Semester 5">Semester 5</option><option value="Semester 6">Semester 6</option>
+                    <option value="Semester 7">Semester 7</option><option value="Semester 8">Semester 8</option>
+                </select>
+            </div>
+            <div class="input-group"><label>Email Address</label><input type="email" id="email" placeholder="Enter Email Address" required></div>
+            <div class="input-group password-wrapper">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Create Password" required>
+                <span id="togglePassword" class="eye-icon">👁️</span>
+            </div>
+            <button type="submit" class="btn" id="submitBtn">Register Trainee</button>
+            <div id="messageBox" class="message-box"></div>
+        </form>
+        <p style="margin-top:20px;">Already Registered? <a href="trainee-login.html" style="color:#f39c12; text-decoration:none; font-weight:bold;">Login Here</a></p>
+    </div>
+    <script src="toast.js"></script><script src="trainee-register.js"></script>
+</body>
+</html>

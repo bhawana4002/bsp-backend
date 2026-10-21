@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trainee Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-animation"><div class="coil coil-1"></div><div class="coil coil-2"></div></div>
+    <div class="container">
+        <h2>🎓 Trainee Login</h2>
+        <form id="traineeLoginForm">
+            <div class="input-group">
+                <label>Trainee ID</label>
+                <input type="text" id="traineeId" placeholder="e.g. BSP5803" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="traineePassword" placeholder="Enter Password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        
+        <!-- Forgot Password aur Back Link -->
+        <div style="display: flex; justify-content: space-between; margin-top: 15px; font-size: 14px;">
+            <a href="index.html" style="color:#bdc3c7; text-decoration:none;">← Back</a>
+            <a href="forgot-password.html" style="color:#f39c12; text-decoration:none;">Forgot Password?</a>
+        </div>
+    </div>
+    <script src="toast.js"></script>
+    <script src="trainee-login.js"></script>
+</body>
+</html>
