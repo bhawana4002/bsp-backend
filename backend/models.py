@@ -1,27 +1,43 @@
 from pydantic import BaseModel
+from typing import Optional
+from datetime import date
 
-# Trainee Register karne ke liye data model
 class TraineeRegister(BaseModel):
-    fullName: str
+    yyyy: int
     rollNumber: str
-    phoneNumber: str
-    semester: str
-    email: str
+    name: str
+    college: str
+    address: Optional[str] = None
+    fromDate: date
+    toDate: date
+    section: Optional[str] = None
+    deptTrgEnggPlno: Optional[int] = None
+    deptTrgEnggName: Optional[str] = None
+    deptTrgEnggDesig: Optional[str] = None
+    guidePlno: Optional[int] = None
+    guideName: Optional[str] = None
+    guideDesig: Optional[str] = None
+    projectTitle: Optional[str] = None
+    remarks: Optional[str] = None
     password: str
+    insBy: int = 1001
 
-# Trainee Login ke liye
 class TraineeLogin(BaseModel):
-    id: str
+    yyyy: int
+    rollNumber: str
     password: str
 
-# Admin Login ke liye
 class AdminLogin(BaseModel):
-    adminId: str
+    plno: int
     password: str
 
-# Work Update ke liye (Admin karega)
+class AttendanceUpdate(BaseModel):
+    yyyy: int
+    rollNumber: str
+    attDate: date
+    status: str
+    remarks: Optional[str] = None
+
 class WorkUpdate(BaseModel):
-    attendance: str
-    tasks: str
-    project: str
-    progress: str
+    projectTitle: str
+    remarks: str

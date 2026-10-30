@@ -4,113 +4,75 @@ if (localStorage.getItem("loggedInAdmin") !== "true") {
     showToast("Logged in successfully as Admin!", "success"); 
 }
 
-function maskPhone(phone) {
-    if (!phone || phone.length < 10) return "N/A";
-    return phone.substring(0, 4) + "***" + phone.substring(phone.length - 3);
-}
+const backendURL = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost" 
+    ? "http://127.0.0.1:8000" : "https://bsp-backend-phwb.onrender.com";
 
 async function fetchTrainees() {
     const tbody = document.getElementById("traineeTableBody");
-    tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>Loading data from server...</td></tr>";
-
+    tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>Loading...</td></tr>";
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/trainees");
+        const response = await fetch(`${backendURL}/api/trainees`);
         const trainees = await response.json();
         tbody.innerHTML = ""; 
-        
-        // Stats Calculation
-        let total = trainees.length;
-        let approved = trainees.filter(t => t.status === 'Approved').length;
-        let pending = total - approved;
-
-        document.getElementById("statTotal").innerText = total;
-        document.getElementById("statApproved").innerText = approved;
-        document.getElementById("statPending").innerText = pending;
-
-        if(total === 0) {
-            tbody.innerHTML = "<tr><td colspan='6' style='text-align:center;'>No trainees found.</td></tr>";
+        if(trainees.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>No trainees found.</td></tr>";
             return;
         }
-
         trainees.forEach((t) => {
+            const yyyy = t.yyyy || t.YYYY;
+            const roll_no = t.roll_no || t.ROLL_NO;
+            const name = t.name || t.NAME;
+            const college = t.college || t.COLLEGE;
+            const project = t.project_title || t.PROJECT_TITLE || "N/A";
+            const status = t.status || t.STATUS || "Pending";
+
             const tr = document.createElement("tr");
             tr.innerHTML = `
-                <td style="font-weight:600; color:#f39c12;">${t.id}</td>
-                <td>${t.name}</td>
-                <td>${t.roll_number}</td>
-                <td>${maskPhone(t.phone)}</td>
-                <td><span class="status-badge ${t.status === 'Approved' ? 'status-approved' : 'status-pending'}">${t.status}</span></td>
+                <td style="font-weight:600; color:#f39c12;">${yyyy}</td>
+                <td>${roll_no}</td>
+                <td>${name}</td>
+                <td>${college}</td>
+                <td>${project}</td>
+                <td><span class="status-badge ${status === 'Approved' ? 'status-approved' : 'status-pending'}">${status}</span></td>
                 <td>
-                    <button class="action-btn btn-edit" onclick="toggleStatus('${t.id}')">Status</button>
-                    <button class="action-btn" style="background:#9b59b6; color:white;" onclick="updateWork('${t.id}')">Update Work</button>
-                    <button class="action-btn btn-delete" onclick="deleteTrainee('${t.id}')">Delete</button>
+                    <button class="action-btn btn-edit" onclick="toggleStatus('${yyyy}', '${roll_no}')">Status</button>
+                    <button class="action-btn btn-delete" onclick="deleteTrainee('${yyyy}', '${roll_no}')">Delete</button>
                 </td>`;
             tbody.appendChild(tr);
         });
     } catch (error) {
-        tbody.innerHTML = "<tr><td colspan='6' style='text-align:center; color:red;'>Error connecting to backend!</td></tr>";
-        showToast("Failed to load data!", "error");
+        tbody.innerHTML = "<tr><td colspan='7' style='text-align:center; color:red;'>Error!</td></tr>";
     }
 }
 
-// Naya Trainee Add
-document.getElementById("addBtn").addEventListener("click", async () => {
-    const name = document.getElementById("newName").value.trim();
-    const roll = document.getElementById("newRoll").value.trim();
-    const phone = document.getElementById("newPhone").value.trim();
-    const pass = document.getElementById("newPass").value.trim();
-
-    if (!name || !roll || !phone || !pass) return showToast("Please fill all fields!", "error");
-    if (phone.length !== 10) return showToast("Phone must be 10 digits!", "error");
-
-    const formData = { fullName: name, rollNumber: roll, phoneNumber: phone, semester: "Semester 1", email: `${roll}@bsp.com`, password: pass };
-
+async function toggleStatus(yyyy, rollNo) {
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/admin/add-trainee", {
-            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData)
-        });
-        const data = await response.json();
-        if (response.ok) {
-            showToast(`Trainee Added! ID: ${data.trainee_id}`, "success");
-            document.getElementById("newName").value = ""; document.getElementById("newRoll").value = "";
-            document.getElementById("newPhone").value = ""; document.getElementById("newPass").value = "";
+        // URL query parameter use kar rahe hain (slash problem fix)
+        const response = await fetch(`${backendURL}/api/status/update?yyyy=${yyyy}&roll_no=${encodeURIComponent(rollNo)}`, { method: "PUT" });
+        if (response.ok) { 
+            showToast("Status Updated!", "success"); 
             fetchTrainees(); 
-        } else { showToast(data.detail || "Failed to add!", "error"); }
-    } catch (error) { showToast("Server Error!", "error"); }
-});
-
-// Status Toggle
-async function toggleStatus(id) {
-    try {
-        const response = await fetch(`http://127.0.0.1:8000/api/trainees/${id}/status`, { method: "PUT" });
-        if (response.ok) { showToast("Status Updated!", "success"); fetchTrainees(); }
-    } catch (error) { showToast("Server Error!", "error"); }
+        } else { 
+            const errorData = await response.json();
+            showToast(errorData.detail || "Error updating status!", "error"); 
+        }
+    } catch (error) { 
+        showToast("Server Error!", "error"); 
+    }
 }
 
-// Work Update
-async function updateWork(id) {
-    const att = prompt("Enter Attendance (e.g. 18/20):"); if (att === null) return;
-    const tsk = prompt("Enter Tasks (e.g. 5/8):"); if (tsk === null) return;
-    const prj = prompt("Enter Project Name:"); if (prj === null) return;
-    const prg = prompt("Enter Progress (e.g. 75%):"); if (prg === null) return;
-
+async function deleteTrainee(yyyy, rollNo) {
+    if (!confirm("Are you sure you want to delete this trainee?")) return;
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/trainees/${id}/work`, {
-            method: "PUT", headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ attendance: att, tasks: tsk, project: prj, progress: prg })
-        });
-        if (response.ok) { showToast("Work Updated!", "success"); fetchTrainees(); }
-    } catch (error) { showToast("Server Error!", "error"); }
+        // Delete bhi query parameter se
+        const response = await fetch(`${backendURL}/api/delete/trainee?yyyy=${yyyy}&roll_no=${encodeURIComponent(rollNo)}`, { method: "DELETE" });
+        if (response.ok) { 
+            showToast("Trainee Deleted!", "success"); 
+            fetchTrainees(); 
+        }
+    } catch (error) { 
+        showToast("Server Error!", "error"); 
+    }
 }
 
-// Delete Trainee
-async function deleteTrainee(id) {
-    if (!confirm("Are you sure?")) return;
-    try {
-        const response = await fetch(`http://127.0.0.1:8000/api/trainees/${id}`, { method: "DELETE" });
-        if (response.ok) { showToast("Trainee Deleted!", "success"); fetchTrainees(); }
-    } catch (error) { showToast("Server Error!", "error"); }
-}
-
-// Page load hote hi list fetch karo
 fetchTrainees();

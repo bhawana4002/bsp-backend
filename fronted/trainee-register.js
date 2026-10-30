@@ -1,38 +1,34 @@
-document.getElementById("togglePassword").addEventListener("click", function () {
-    const pwd = document.getElementById("password");
-    pwd.type = pwd.type === "password" ? "text" : "password";
-    this.textContent = pwd.type === "password" ? "👁️" : "🙈";
-});
-
 document.getElementById("registerForm").addEventListener("submit", async function (e) {
     e.preventDefault();
     const msgBox = document.getElementById("messageBox");
     const btn = document.getElementById("submitBtn");
 
-    // Form data collect karna
     const formData = {
-        fullName: document.getElementById("fullName").value.trim(),
+        yyyy: parseInt(document.getElementById("yyyy").value),
         rollNumber: document.getElementById("rollNumber").value.trim(),
-        phoneNumber: document.getElementById("phoneNumber").value.trim(),
-        semester: document.getElementById("semester").value,
-        email: document.getElementById("email").value.trim(),
-        password: document.getElementById("password").value
+        name: document.getElementById("name").value.trim(),
+        college: document.getElementById("college").value.trim(),
+        fromDate: document.getElementById("fromDate").value,
+        toDate: document.getElementById("toDate").value,
+        guideName: document.getElementById("guideName").value.trim(),
+        projectTitle: document.getElementById("projectTitle").value.trim(),
+        password: document.getElementById("password").value,
+        insBy: 1001
     };
 
-    if (formData.phoneNumber.length !== 10) { 
-        msgBox.className = "message-box error"; msgBox.innerText = "Phone must be 10 digits."; return; 
-    }
-    if (formData.password.length < 6) { 
-        msgBox.className = "message-box error"; msgBox.innerText = "Password min 6 chars."; return; 
+    if (!formData.yyyy || !formData.rollNumber || !formData.name || !formData.college) {
+        msgBox.className = "message-box error"; msgBox.innerText = "Please fill required fields."; return;
     }
 
     btn.disabled = true; btn.innerText = "Registering...";
     msgBox.className = "message-box";
-    msgBox.style.display = "none";
+    
+    const backendURL = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost" 
+        ? "http://127.0.0.1:8000" 
+        : "https://bsp-backend-phwb.onrender.com";
 
     try {
-        // Backend ko data bhej rahe hain
-        const response = await fetch("http://127.0.0.1:8000/api/register", {
+        const response = await fetch(`${backendURL}/api/register`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
@@ -42,7 +38,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
         if (response.ok) {
             msgBox.className = "message-box success";
-            msgBox.innerText = `Registration Successful! Your Trainee ID is: ${data.trainee_id}`;
+            msgBox.innerText = `Registration Successful! Your ID is: ${data.trainee_id}`;
             document.getElementById("registerForm").reset();
         } else {
             msgBox.className = "message-box error";

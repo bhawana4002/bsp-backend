@@ -1,22 +1,13 @@
-Bilkul! Aapko ye saari commands ek jagah save kar leni chahiye, taaki baar-baar yaad karne ki zaroorat na pade. 
-
-Sabse best tarika hai ki aap apne VS Code ke main folder (`BSP_Trainee_System`) mein ek nayi file banayein jiska naam **`README.md`** ya **`Commands.txt`** rakhein. 
-
-Aap usme ye saara data copy-paste kar dein:
-
----
-
-### 📝 Project Commands Cheat Sheet
-
-#### 1. Project Start Karne Ke Liye (Subah)
-```bash
-# Step 1: Oracle Database Start Karein
 docker start oracle-db
 
-# Step 2: Backend Folder Mein Jayein aur Server Start Karein
+
 cd backend
 uvicorn main:app --reload --port 8000
-```
+
+docker exec -it oracle-db sqlplus system/admin123@localhost:1521/XEPDB1
+
+SELECT * FROM trainees;
+
 *(Note: Frontend ke liye VS Code mein `index.html` par right-click karke "Open with Live Server" dabayein).*
 
 #### 2. Agar Port Already in Use Ka Error Aaye

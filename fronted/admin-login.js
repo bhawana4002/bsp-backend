@@ -1,14 +1,18 @@
 document.getElementById("adminLoginForm").addEventListener("submit", async function (e) {
     e.preventDefault();
-    const adminId = document.getElementById("adminId").value.trim();
+    
+    const adminId = parseInt(document.getElementById("adminId").value.trim());
     const password = document.getElementById("adminPassword").value.trim();
 
+    const backendURL = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost" 
+        ? "http://127.0.0.1:8000" 
+        : "https://bsp-backend-phwb.onrender.com";
+
     try {
-        // Python Backend ko request bhej rahe hain
-        const response = await fetch("http://127.0.0.1:8000/api/login/admin", {
+        const response = await fetch(`${backendURL}/api/login/admin`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ adminId: adminId, password: password })
+            body: JSON.stringify({ plno: adminId, password: password })
         });
 
         const data = await response.json();
@@ -18,7 +22,9 @@ document.getElementById("adminLoginForm").addEventListener("submit", async funct
             localStorage.setItem("loggedInAdmin", "true");
             setTimeout(() => window.location.href = "admin-dashboard.html", 800);
         } else {
-            showToast(data.detail || "Invalid Credentials!", "error");
+            let errorMsg = data.detail;
+            if (typeof errorMsg === 'object') errorMsg = "Invalid ID or Password format!";
+            showToast(errorMsg || "Invalid Credentials!", "error");
         }
     } catch (error) {
         showToast("Server error! Is Python running?", "error");

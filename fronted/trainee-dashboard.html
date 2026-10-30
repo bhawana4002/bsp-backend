@@ -16,41 +16,35 @@
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <!-- Left Side: Profile Card -->
+            <!-- Left Side: Profile -->
             <div class="id-card">
                 <h3 style="color: #f39c12; border-bottom: 1px solid #34495e; padding-bottom: 10px; margin-bottom: 15px;">👤 My Profile</h3>
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                     <div>
                         <h2 id="tName" style="text-align: left; margin: 0; color: white;">Name</h2>
-                        <p id="tId" style="text-align: left; margin-top: 5px; color: #bdc3c7;">ID: --</p>
+                        <p id="tId" style="text-align: left; margin-top: 5px; color: #bdc3c7;">Year/Roll: --</p>
                     </div>
                     <div id="tStatus" class="status-badge">Status</div>
                 </div>
-                <div class="info-item" style="margin-bottom: 12px;"><label>Roll Number</label><p id="tRoll">--</p></div>
-                <div class="info-item" style="margin-bottom: 12px;"><label>Semester</label><p id="tSem">--</p></div>
-                <div class="info-item" style="margin-bottom: 12px;"><label>Phone Number (Masked)</label><p id="tPhone">--</p></div>
-                <div class="info-item"><label>Email Address (Masked)</label><p id="tEmail">--</p></div>
+                <div class="info-item" style="margin-bottom: 12px;"><label>College</label><p id="tCollege">--</p></div>
+                <div class="info-item" style="margin-bottom: 12px;"><label>Project Title</label><p id="tProject">--</p></div>
+                <div class="info-item" style="margin-bottom: 12px;"><label>Training From</label><p id="tFrom">--</p></div>
+                <div class="info-item"><label>Training To</label><p id="tTo">--</p></div>
             </div>
 
-            <!-- Right Side: Work Progress Card -->
+            <!-- Right Side: Work Progress -->
             <div class="id-card" style="border-top: 5px solid #3498db;">
                 <h3 style="color: #3498db; border-bottom: 1px solid #34495e; padding-bottom: 10px; margin-bottom: 15px;">📊 My Work Progress</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <!-- Attendance -->
                     <div style="background: #1a252f; padding: 15px; border-radius: 8px; border-left: 3px solid #f39c12;">
                         <label style="font-size: 11px; color: #bdc3c7; text-transform: uppercase;">Attendance</label>
-                        <p id="tAttendance" style="font-size: 20px; font-weight: bold; color: #f39c12; margin-top: 5px;">--</p>
+                        <p id="tAttendance" style="font-size: 16px; font-weight: bold; color: #f39c12; margin-top: 5px;">--</p>
                     </div>
+                    <!-- Guide Name (Tasks ki jagah) -->
                     <div style="background: #1a252f; padding: 15px; border-radius: 8px; border-left: 3px solid #2ecc71;">
-                        <label style="font-size: 11px; color: #bdc3c7; text-transform: uppercase;">Tasks Completed</label>
-                        <p id="tTasks" style="font-size: 20px; font-weight: bold; color: #2ecc71; margin-top: 5px;">--</p>
-                    </div>
-                    <div style="background: #1a252f; padding: 15px; border-radius: 8px; border-left: 3px solid #9b59b6;">
-                        <label style="font-size: 11px; color: #bdc3c7; text-transform: uppercase;">Current Project</label>
-                        <p id="tProject" style="font-size: 16px; font-weight: bold; color: #9b59b6; margin-top: 5px;">--</p>
-                    </div>
-                    <div style="background: #1a252f; padding: 15px; border-radius: 8px; border-left: 3px solid #e74c3c;">
-                        <label style="font-size: 11px; color: #bdc3c7; text-transform: uppercase;">Overall Progress</label>
-                        <p id="tProgress" style="font-size: 20px; font-weight: bold; color: #e74c3c; margin-top: 5px;">--</p>
+                        <label style="font-size: 11px; color: #bdc3c7; text-transform: uppercase;">Guide Name</label>
+                        <p id="tGuide" style="font-size: 16px; font-weight: bold; color: #2ecc71; margin-top: 5px;">--</p>
                     </div>
                 </div>
                 <div style="margin-top: 20px;">
